@@ -163,7 +163,8 @@ public class MainActivity extends Activity implements OnItemClickListener {
 
         switch (pos) {
             case 0:
-                i = new Intent(this, LineChartActivity1.class);
+//                i = new Intent(this, LineChartActivity1.class);
+                i = new Intent(this, CombinedChartActivity.class);
                 startActivity(i);
                 break;
             case 1:
