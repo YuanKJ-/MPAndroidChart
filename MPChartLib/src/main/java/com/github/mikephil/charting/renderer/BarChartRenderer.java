@@ -96,8 +96,6 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
         float phaseX = mAnimator.getPhaseX();
         float phaseY = mAnimator.getPhaseY();
 
-        //todo 在此插入选中阴影的绘制
-
         // draw the bar shadow before the values
         if (mChart.isDrawBarShadowEnabled()) {
             mShadowPaint.setColor(dataSet.getBarShadowColor());

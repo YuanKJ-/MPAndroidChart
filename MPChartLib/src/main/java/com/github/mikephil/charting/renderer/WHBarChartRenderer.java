@@ -181,8 +181,9 @@ public class WHBarChartRenderer extends BarLineScatterCandleBubbleRenderer {
                 c.drawRect(buffer.buffer[j] - barWidthHalf, 0, buffer.buffer[j + 2] + barWidthHalf, mChart.getHeight(), selectedPaint);
             }
 
-            c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
-                    buffer.buffer[j + 3], mRenderPaint);
+            // 修改为圆角矩形
+            c.drawRoundRect(new RectF(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
+                    buffer.buffer[j + 3]), 4, 4, mRenderPaint);
 
             if (drawBorder) {
                 c.drawRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
