@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
@@ -60,7 +61,12 @@ public class CombinedChartActivity extends DemoBase {
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                Log.d(TAG, "onValueSelected: ");
+                if (e instanceof BarEntry) {
+                    BarData barData = mChart.getBarData();
+                    int index = barData.getDataSetForEntry(e).getEntryIndex((BarEntry) e);
+                    barData.setSelectedIndex(index);
+                    Log.d(TAG, "onValueSelected: ");
+                }
             }
 
             @Override
@@ -143,17 +149,19 @@ public class CombinedChartActivity extends DemoBase {
         }
 
         BarDataSet set1 = new BarDataSet(entries1, "Bar 1");
-        set1.setColor(Color.parseColor("#8190FF"));
+        set1.setColor(Color.parseColor("#28C1AD"));
+        set1.setHighLightColor(Color.parseColor("#28C1AD"));
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         BarDataSet set2 = new BarDataSet(entries2, "");
-        set2.setColor(Color.parseColor("#28C1AD"));
+        set2.setColor(Color.parseColor("#8190FF"));
+        set2.setHighLightColor(Color.parseColor("#8190FF"));
         set2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         //106
-        float groupSpace = 0.32f; //34
-        float barSpace = 0.11f; // 12
-        float barWidth = 0.23f; // 24
+        float groupSpace = 0.26f; //34
+        float barSpace = 0.13f; // 12
+        float barWidth = 0.24f; // 24
         // (0.45 + 0.02) * 2 + 0.06 = 1.00 -> interval per "group"
 
         BarData d = new BarData(set1, set2);

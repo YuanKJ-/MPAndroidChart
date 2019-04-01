@@ -13,6 +13,10 @@ import java.util.List;
 public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
 
     /**
+     * 存储当前bar view选中的index，-1为没选中
+     */
+    private int selectedIndex = -1;
+    /**
      * the width of the bars on the x-axis, in values (not pixels)
      */
     private float mBarWidth = 0.85f;
@@ -41,6 +45,18 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
 
     public float getBarWidth() {
         return mBarWidth;
+    }
+
+    /**
+     * 设置选中index
+     * @param selectedIndex
+     */
+    public void setSelectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
+    }
+
+    public int getSelectedIndex() {
+        return selectedIndex;
     }
 
     /**
