@@ -52,6 +52,7 @@ public class CombinedChartActivity extends DemoBase {
         mChart.setDrawGridBackground(false);
         mChart.setDrawBarShadow(false);
         mChart.setHighlightFullBarEnabled(false);
+        mChart.getLegend().setEnabled(false);
         mChart.setScaleEnabled(false); //不允许放大缩小
         mChart.setDrawBorders(false); //不绘制表格边框
 //        mChart.setHighlightPerTapEnabled(false); //不允许点击高亮
@@ -115,7 +116,7 @@ public class CombinedChartActivity extends DemoBase {
 
         LineDataSet set = new LineDataSet(entries, "Line DataSet");
         set.setColor(Color.parseColor("#FFBC1C"));
-        set.setLineWidth(2.5f);
+        set.setLineWidth(1.5f);
         set.setCircleColor(Color.WHITE);
         set.setCircleRadius(4.5f);
         set.setCircleColorHole(Color.parseColor("#FFBC1C"));
@@ -138,29 +139,25 @@ public class CombinedChartActivity extends DemoBase {
         for (int index = 0; index < itemCount; index++) {
             entries1.add(new BarEntry(0, getRandom(25, 25)));
 
-            // stacked
-            entries2.add(new BarEntry(0, new float[]{getRandom(13, 12), getRandom(13, 12)}));
+            entries2.add(new BarEntry(0, getRandom(13, 12)));
         }
 
         BarDataSet set1 = new BarDataSet(entries1, "Bar 1");
-        set1.setColor(Color.rgb(60, 220, 78));
-        set1.setValueTextColor(Color.rgb(60, 220, 78));
-        set1.setValueTextSize(10f);
+        set1.setColor(Color.parseColor("#8190FF"));
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         BarDataSet set2 = new BarDataSet(entries2, "");
-        set2.setStackLabels(new String[]{"Stack 1", "Stack 2"});
-        set2.setColors(new int[]{Color.rgb(61, 165, 255), Color.rgb(23, 197, 255)});
-        set2.setValueTextColor(Color.rgb(61, 165, 255));
-        set2.setValueTextSize(10f);
+        set2.setColor(Color.parseColor("#28C1AD"));
         set2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-        float groupSpace = 0.06f;
-        float barSpace = 0.02f; // x2 dataset
-        float barWidth = 0.45f; // x2 dataset
+        //106
+        float groupSpace = 0.32f; //34
+        float barSpace = 0.11f; // 12
+        float barWidth = 0.23f; // 24
         // (0.45 + 0.02) * 2 + 0.06 = 1.00 -> interval per "group"
 
         BarData d = new BarData(set1, set2);
+        d.setDrawValues(false);
         d.setBarWidth(barWidth);
 
         // make this BarData object grouped
