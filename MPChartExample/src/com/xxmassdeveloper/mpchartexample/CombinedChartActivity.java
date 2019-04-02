@@ -2,6 +2,7 @@
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,11 +34,13 @@ import java.util.ArrayList;
 
 public class CombinedChartActivity extends DemoBase {
 
+    private static final int X_AXIS_SHOW_COUNT = 7;
+    private static final int itemCount = 16;
+
     private String[] date = new String[] {
-            "8.11", "8.12", "8.13", "8.14", "8.15", "8.16", "8.17"
+            "8.11", "8.12", "8.13", "8.14", "8.15", "8.16", "8.17","8.18", "8.19", "8.20", "8.21", "8.22", "8.23", "8.24"
     };
     private CombinedChart mChart;
-    private final int itemCount = 7;
     private static final String TAG = "CombinedChartActivity";
 
     @Override
@@ -57,7 +60,6 @@ public class CombinedChartActivity extends DemoBase {
         mChart.setScaleEnabled(false); //不允许放大缩小
         mChart.setDrawBorders(false); //不绘制表格边框
         mChart.setExtraBottomOffset(12f); //设置chartView距离底部边距 ps:padding属性无效,只能设置这个
-//        mChart.setHighlightPerTapEnabled(false); //不允许点击高亮
         mChart.setHighlightPerDragEnabled(false); //不允许拖动高亮
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -126,7 +128,12 @@ public class CombinedChartActivity extends DemoBase {
         xAxis.setAxisMaximum(data.getXMax() + 0.5f);
 
         mChart.setData(data);
+
         mChart.invalidate();
+        // 为了使 柱状图成为可滑动的,将水平方向 放大 2倍 (可滑动关键代码)
+        Matrix mMatrix = new Matrix();
+        mMatrix.postScale(itemCount / (float)X_AXIS_SHOW_COUNT, 1f);
+        mChart.getViewPortHandler().refresh(mMatrix, mChart, false);
     }
 
     private LineData generateLineData() {
