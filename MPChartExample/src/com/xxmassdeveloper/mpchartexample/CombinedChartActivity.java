@@ -56,6 +56,7 @@ public class CombinedChartActivity extends DemoBase {
         mChart.getLegend().setEnabled(false);
         mChart.setScaleEnabled(false); //不允许放大缩小
         mChart.setDrawBorders(false); //不绘制表格边框
+        mChart.setExtraBottomOffset(12f); //设置chartView距离底部边距 ps:padding属性无效,只能设置这个
 //        mChart.setHighlightPerTapEnabled(false); //不允许点击高亮
         mChart.setHighlightPerDragEnabled(false); //不允许拖动高亮
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
@@ -84,18 +85,35 @@ public class CombinedChartActivity extends DemoBase {
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
         rightAxis.setDrawAxisLine(false);
+        rightAxis.setLabelCount(9, true); //固定左右Y轴显示数量为9个
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        //y轴标签样式
+        rightAxis.setTextColor(Color.parseColor("#666666"));
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        rightAxis.setXOffset(0f);
+
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);
         leftAxis.setDrawAxisLine(false);
+        leftAxis.setLabelCount(9, true); //固定左右Y轴显示数量为9个
+        leftAxis.setGridColor(Color.parseColor("#DDDFE2"));
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        //y轴标签样式
+        leftAxis.setTextColor(Color.parseColor("#666666"));
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        leftAxis.setXOffset(0f);
+
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
+        //设置x轴标签样式和内容
+        xAxis.setTextColor(Color.parseColor("#666666"));
+        xAxis.setYOffset(10f); //距离x轴10dp
         xAxis.setValueFormatter(new IndexAxisValueFormatter(date));
         xAxis.setCenterAxisLabels(true);
 
