@@ -24,18 +24,20 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class CombinedChartActivity extends DemoBase {
 
     private static final int X_AXIS_SHOW_COUNT = 7;
-    private static final int itemCount = 16;
+    private static final int itemCount = 12;
 
     private String[] date = new String[] {
             "8.11", "8.12", "8.13", "8.14", "8.15", "8.16", "8.17","8.18", "8.19", "8.20", "8.21", "8.22", "8.23", "8.24"
@@ -93,6 +95,9 @@ public class CombinedChartActivity extends DemoBase {
         rightAxis.setTextColor(Color.parseColor("#666666"));
         rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         rightAxis.setXOffset(0f);
+        rightAxis.setAxisMaximum(100f); //右侧Y轴显示百分比数据,最大100%
+        rightAxis.setAxisMinimum(0f); //最小0%
+        rightAxis.setValueFormatter(new PercentFormatter(new DecimalFormat("##0")));
 
 
         YAxis leftAxis = mChart.getAxisLeft();
@@ -140,24 +145,42 @@ public class CombinedChartActivity extends DemoBase {
 
         LineData d = new LineData();
 
-        ArrayList<Entry> entries = new ArrayList<Entry>();
+        ArrayList<Entry> entries1 = new ArrayList<Entry>();
+        ArrayList<Entry> entries2 = new ArrayList<Entry>();
 
-        for (int index = 0; index < itemCount; index++)
-            entries.add(new Entry(index + 0.5f, getRandom(15, 5)));
 
-        LineDataSet set = new LineDataSet(entries, "Line DataSet");
-        set.setColor(Color.parseColor("#FFBC1C"));
-        set.setLineWidth(1.5f);
-        set.setCircleColor(Color.WHITE);
-        set.setCircleRadius(4.5f);
-        set.setCircleColorHole(Color.parseColor("#FFBC1C"));
-        set.setCircleHoleRadius(3.5f);
-        set.setMode(LineDataSet.Mode.LINEAR);
-        set.setDrawValues(false);
+        for (int index = 0; index < itemCount; index++) {
+            entries1.add(new Entry(index + 0.5f, getRandom(50, 30)));
 
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setHighlightEnabled(false);
-        d.addDataSet(set);
+            entries2.add(new Entry(index + 0.5f, getRandom(60, 25)));
+        }
+
+        // line数据1
+        LineDataSet set1 = new LineDataSet(entries1, "line One");
+        set1.setColor(Color.parseColor("#FFBC1C"));
+        set1.setLineWidth(1.5f);
+        set1.setCircleColor(Color.WHITE);
+        set1.setCircleRadius(4.5f);
+        set1.setCircleColorHole(Color.parseColor("#FFBC1C"));
+        set1.setCircleHoleRadius(3.5f);
+        set1.setMode(LineDataSet.Mode.LINEAR);
+        set1.setAxisDependency(YAxis.AxisDependency.RIGHT); //依赖于右Y轴显示数据
+
+        // line数据2
+        LineDataSet set2 = new LineDataSet(entries2, "Line Two");
+        set2.setColor(Color.parseColor("#E95656"));
+        set2.setLineWidth(1.5f);
+        set2.setCircleColor(Color.WHITE);
+        set2.setCircleRadius(4.5f);
+        set2.setCircleColorHole(Color.parseColor("#E95656"));
+        set2.setCircleHoleRadius(3.5f);
+        set2.setMode(LineDataSet.Mode.LINEAR);
+        set2.setAxisDependency(YAxis.AxisDependency.RIGHT); //依赖于右Y轴显示数据
+
+        d.addDataSet(set1);
+        d.addDataSet(set2);
+        d.setHighlightEnabled(false); //折线不允许高亮显示
+        d.setDrawValues(false);
 
         return d;
     }
@@ -173,17 +196,19 @@ public class CombinedChartActivity extends DemoBase {
             entries2.add(new BarEntry(0, getRandom(13, 12)));
         }
 
+        // bar数据1
         BarDataSet set1 = new BarDataSet(entries1, "Bar 1");
         set1.setColor(Color.parseColor("#28C1AD"));
         set1.setHighLightColor(Color.parseColor("#28C1AD"));
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
+        // bar数据2
         BarDataSet set2 = new BarDataSet(entries2, "");
         set2.setColor(Color.parseColor("#8190FF"));
         set2.setHighLightColor(Color.parseColor("#8190FF"));
         set2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-        //106
+        // 设计稿是按px为单位做的,但开源库是按百分比来设定,只能大概计算百分比进行设置
         float groupSpace = 0.26f; //34
         float barSpace = 0.13f; // 12
         float barWidth = 0.24f; // 24
