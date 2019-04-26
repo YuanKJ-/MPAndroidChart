@@ -171,14 +171,27 @@ public class WHBarChartRenderer extends BarLineScatterCandleBubbleRenderer {
             }
 
             BarData barData = mChart.getBarData();
+            // 获取当前选中需要背部阴影的x轴位置,每个x轴位置又会有多条bar,数量为mBarBuffers.length
             int selectedIndex = barData.getSelectedIndex();
             if (j / 4 == selectedIndex) {
-                // 左右选中阴影各延伸柱状宽度的一半
+                // 默认左右选中阴影各延伸柱状宽度的一半,实际如果是多条bar
                 float barWidthHalf = (buffer.buffer[j + 2] - buffer.buffer[j]) / 2f;
-                LinearGradient linearGradient = new LinearGradient(buffer.buffer[j] - barWidthHalf, 0, buffer.buffer[j + 2] + barWidthHalf, mChart.getHeight(),
+                float x0 = buffer.buffer[j] - barWidthHalf;
+                float x1 = buffer.buffer[j + 2] + barWidthHalf;
+                if(index - 1 >=0){
+                    // 如果barGroup当前绘制bar的左侧有bar,则阴影左侧最大宽度需要缩减到两条bar的中间位置,必须不能绘制过度
+                    float tempX0 = x0 = buffer.buffer[j] - (buffer.buffer[j] - mBarBuffers[index - 1].buffer[j + 2]) / 2;
+                    x0 = x0 < tempX0 ? x0 : tempX0;
+                }
+                if(index + 1 < mBarBuffers.length) {
+                    // 如果barGroup当前绘制bar的右侧有bar,则阴影右侧最大宽度需要缩减到两条bar的中间位置,必须不能绘制过度
+                    float tempX1 = buffer.buffer[j + 2] + (mBarBuffers[index + 1].buffer[j] - buffer.buffer[j + 2]) / 2;
+                    x1 = x1 < tempX1 ? x1 : tempX1;
+                }
+                LinearGradient linearGradient = new LinearGradient(x0, 0, x1, mChart.getHeight(),
                         new int[]{Color.parseColor("#E9F8F6"), Color.TRANSPARENT}, new float[]{0, 1.0f}, Shader.TileMode.CLAMP);
                 selectedPaint.setShader(linearGradient);
-                c.drawRect(buffer.buffer[j] - barWidthHalf, 0, buffer.buffer[j + 2] + barWidthHalf, mChart.getHeight(), selectedPaint);
+                c.drawRect(x0, 0, x1, mChart.getHeight(), selectedPaint);
             }
 
             // 修改为圆角矩形
